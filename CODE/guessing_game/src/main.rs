@@ -1,6 +1,5 @@
 use std::io::{stdin,stdout,Write};
 use rand::Rng;
-use std::process::exit;
 
 static VERSION: &str = "V0.1";
 static MIN_NUM: u32 = 1;
