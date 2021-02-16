@@ -24,6 +24,7 @@ fn main() {
 fn compile_script(file_location: &str, masm_install: &str) {
     println!("        {}        ", color_print("                                      COMPILING                                       ", 44));
     println!("{}[35m", color_print("[*] Starting Compile", 36));
+    let process_start_time = Instant::now();
     let output = Command::new(format!("{}\\bin\\ml", masm_install))
         .arg("/c")
         .arg("/Zd")
@@ -33,7 +34,7 @@ fn compile_script(file_location: &str, masm_install: &str) {
         .expect("failed to execute process");
 
     if output.success() {
-        println!("{}", color_print("[*] Compile Complete", 32));
+        println!("{} {} {}", color_print("[*] Compile Complete [", 32), color_print(&*format!("{} ms", process_start_time.elapsed().as_millis()), 36), color_print("]", 32));
     } else {
         println!("{}", color_print("[*] Compile Failed", 31));
         exit(0);
@@ -41,6 +42,7 @@ fn compile_script(file_location: &str, masm_install: &str) {
 
     let new_file_loc: &str = &file_location[0..file_location.len() - 4];
     println!("{}[35m", color_print("[*] Starting Linking", 36));
+    let process_start_time = Instant::now();
     let output = Command::new(format!("{}\\bin\\link", masm_install))
         .arg("/SUBSYSTEM:CONSOLE")
         .arg(format!("{}.obj", new_file_loc))
@@ -48,7 +50,7 @@ fn compile_script(file_location: &str, masm_install: &str) {
         .expect("failed to execute process");
 
     if output.success() {
-        println!("{}", color_print("[*] Compile Linking", 32));
+        println!("{} {} {}", color_print("[*] Compile Linking  [", 32), color_print(&*format!("{} ms", process_start_time.elapsed().as_millis()), 36), color_print("]", 32));
     } else {
         println!("{}", color_print("[*] Linking Failed", 31));
         exit(0);
